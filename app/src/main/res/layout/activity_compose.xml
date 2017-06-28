@@ -11,7 +11,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:gravity="top"
-        android:hint="What's happening?"></EditText>
+        android:hint="What's happening?"
+        android:maxLength="140">
+    </EditText>
 
     <Button
         android:id="@+id/buttonSendTweet"
@@ -24,5 +26,14 @@
         android:onClick="onSubmit"
         android:background="@android:color/holo_blue_bright"
         android:text="Tweet" />
+
+    <TextView
+        android:id="@+id/tvCharacterCount"
+        android:layout_marginRight="10dp"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etComposeMessage"
+        android:layout_toStartOf="@+id/buttonSendTweet"
+        android:text="140"/>
 
 </RelativeLayout>
