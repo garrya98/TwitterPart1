@@ -27,7 +27,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
-    private final int REQUEST_CODE = 20;
+    public int REQUEST_CODE = 20;
     private SwipeRefreshLayout swipeContainer;
 
     public class MainActivity extends AppCompatActivity {
@@ -83,6 +83,7 @@ public class TimelineActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
+
 
     public void onComposeAction(MenuItem mi){
         Intent i = new Intent(this, ComposeActivity.class);
@@ -142,7 +143,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_CODE || requestCode == tweetAdapter.REPLY_REQUEST) && resultCode == RESULT_OK) {
             Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
             tweets.add(0, tweet);
             tweetAdapter.notifyItemInserted(0);

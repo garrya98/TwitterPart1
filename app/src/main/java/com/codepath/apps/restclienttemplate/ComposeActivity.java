@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -26,6 +27,8 @@ public class ComposeActivity extends AppCompatActivity {
     TwitterClient client;
     EditText etSendTweet;
     TextView tvCharacterCount;
+    ImageView composeProfilePicture;
+    Tweet tweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class ComposeActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient();
         etSendTweet = (EditText) findViewById(R.id.etComposeMessage);
         tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
+        composeProfilePicture = (ImageView) findViewById(R.id.ivProfilePic);
+
 
         etSendTweet.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -83,6 +88,7 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
     }
+
         // closes the activity and returns to first screen
 
     }

@@ -1,11 +1,14 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +27,7 @@ import java.util.Locale;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
     private List<Tweet> mTweets;
     Context context;
+    public static final int REPLY_REQUEST = 300;
 
     public TweetAdapter(Context contextTurtle, List<Tweet> turtle) {
         mTweets = turtle;
@@ -48,7 +52,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // get the data according to position
-            Tweet tweet = mTweets.get(position);
+            final Tweet tweet = mTweets.get(position);
 
         //populate the views according to this data
         holder.tvUsername.setText(tweet.user.name);
@@ -56,6 +60,16 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvTimeStamp.setText(getRelativeTimeAgo(tweet.createdAt));
 
         Glide.with(context).load(tweet.user.profileImageUrl).into(holder.ivPorfileImage);
+
+        holder.ibReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent newIntent = new Intent(context, ComposeActivity.class);
+                newIntent.putExtra("username", tweet.user.screenName);
+                newIntent.putExtra("uId", tweet.uid);
+                ((Activity) context).startActivityForResult(newIntent, REPLY_REQUEST);
+            }
+        });
     }
 
 
@@ -66,16 +80,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvUsername;
         public TextView tvBody;
         public TextView tvTimeStamp;
+        public ImageButton ibReply;
+        public ImageView ivComposeProfileImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             // perform findViewById lookups
 
-            ivPorfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+            ivPorfileImage = (ImageView) itemView.findViewById(R.id.ivProfilePic);
             tvUsername = (TextView) itemView.findViewById(R.id.tvUsername);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
+            ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
         }
     }
 
