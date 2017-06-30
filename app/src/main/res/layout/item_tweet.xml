@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:paddingLeft="5dp"
@@ -43,11 +43,10 @@
         android:id="@+id/ibReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#ffffff"
-        android:onClick="isReply"
-        app:srcCompat="@drawable/ic_vector_compose_dm"
-        android:layout_below="@+id/ivProfilePic"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="13dp" />
+        android:layout_below="@+id/ivProfilePic"
+        android:backgroundTint="?android:attr/colorBackground"
+        android:onClick="isReply"
+        app:srcCompat="@drawable/ic_vector_compose_dm" />
 
 </RelativeLayout>

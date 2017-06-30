@@ -24,11 +24,14 @@ import cz.msebera.android.httpclient.Header;
 public class ComposeActivity extends AppCompatActivity {
 
     public static final String KEY_TWEET = "tweet";
+    public static final int REPLY_NUMBER = 11;
     TwitterClient client;
     EditText etSendTweet;
     TextView tvCharacterCount;
     ImageView composeProfilePicture;
-    Tweet tweet;
+    public static Tweet tweet;
+    String reply;
+    long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,23 +40,30 @@ public class ComposeActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient();
         etSendTweet = (EditText) findViewById(R.id.etComposeMessage);
         tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
-        composeProfilePicture = (ImageView) findViewById(R.id.ivProfilePic);
+
+        reply = getIntent().getStringExtra("username");
+        if (reply != null) {
+            id = getIntent().getLongExtra("uId",0);
+            etSendTweet.setText("@" + reply);
 
 
-        etSendTweet.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        }
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            etSendTweet.addTextChangedListener(new TextWatcher() {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-            public void afterTextChanged(Editable s) {
-                tvCharacterCount.setText(String.valueOf(140 - etSendTweet.getText().toString().length()));
-            }
-        });
-    }
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                public void afterTextChanged(Editable s) {
+                    tvCharacterCount.setText(String.valueOf(140 - etSendTweet.getText().toString().length()));
+                }
+            });
+        }
     public void onSubmit(View v) {
-        client.sendTweet(etSendTweet.getText().toString(), new JsonHttpResponseHandler() {
+
+        client.sendTweet(etSendTweet.getText().toString(), id, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
