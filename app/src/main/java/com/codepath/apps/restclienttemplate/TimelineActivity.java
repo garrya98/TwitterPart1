@@ -94,9 +94,11 @@ TweetsListFragment tweetList;
 
    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       TweetsListFragment tweetList = (TweetsListFragment) tpAdapter.getItem(0);
-       Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-        tweetList.addTweet(tweet);
-    }
+       if (resultCode == RESULT_OK) {
+           TweetsListFragment tweetList = (TweetsListFragment) tpAdapter.getItem(0);
+           Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+           tweetList.addTweet(tweet);
+       }
+   }
 }
 
