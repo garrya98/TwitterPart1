@@ -14,11 +14,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by garrya on 6/26/17.
@@ -26,13 +33,22 @@ import java.util.Locale;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
     private List<Tweet> mTweets;
-    Context context;
     public static final int REPLY_REQUEST = 300;
+    TwitterClient client;
+    Context context;
+    Tweet tweet;
+    private TweetAdapterListener mListener;
 
-    public TweetAdapter(Context contextTurtle, List<Tweet> turtle) {
-        mTweets = turtle;
-        context = contextTurtle;
+    // define an interface required by the ViewHolder
+    public interface TweetAdapterListener {
+        public void onItemSelected(View vew, int position);
     }
+
+    public TweetAdapter(ArrayList<Tweet> tweets, TweetAdapterListener listener) {
+       mTweets = tweets;
+        this.mListener = listener;
+    }
+
 
 
     //for each row, inflate the layout and cache references into VewHolder
@@ -44,6 +60,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         View tweetView = inflater.inflate(R.layout.item_tweet, parent, false);
         ViewHolder viewHolder = new ViewHolder(tweetView);
+        client = TwitterApp.getRestClient();
         return viewHolder;
     }
 
@@ -70,22 +87,42 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 ((Activity) context).startActivityForResult(newIntent, REPLY_REQUEST);
             }
         });
+        holder.ibRetweet.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                client.retweet(tweet.uid, new JsonHttpResponseHandler(){
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                    }
+                });
+            }
+        });
+        holder.ivPorfileImage.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ProfileActivity.class);
+                i.putExtra("user", Parcels.wrap(tweet.user));
+                ((Activity) context).startActivityForResult(i, REPLY_REQUEST);
+            }
+        });
     }
 
 
     //create ViewHolder class
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivPorfileImage;
         public TextView tvUsername;
         public TextView tvBody;
         public TextView tvTimeStamp;
         public ImageButton ibReply;
+        public ImageButton ibRetweet;
         public ImageView ivComposeProfileImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             // perform findViewById lookups
 
             ivPorfileImage = (ImageView) itemView.findViewById(R.id.ivProfilePic);
@@ -93,14 +130,29 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
             ibReply = (ImageButton) itemView.findViewById(R.id.ibReply);
+            ibRetweet = (ImageButton) itemView.findViewById(R.id.ibRetweet);
+
+            //handle row click event
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if(mListener != null) {
+                        //get the position of row element
+                        int position = getAdapterPosition();
+                        // fire the listener callback
+                        mListener.onItemSelected(v, position);
+
+                    }
+                }
+            });
         }
     }
-
     @Override
     public int getItemCount() {
         return mTweets.size();
     }
-    public String getRelativeTimeAgo(String rawJsonDate) {
+    public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);

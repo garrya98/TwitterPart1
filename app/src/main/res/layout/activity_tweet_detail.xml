@@ -1,9 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.codepath.apps.restclienttemplate.TweetDetail">
+    android:layout_margin="5dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="5dp"
+        android:paddingBottom="5dp"
+        app:srcCompat="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/tvBody" />
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tvTimeStamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:text="TextView" />
+
+    <ImageButton
+        android:id="@+id/ibReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/ivProfilePic"
+        android:backgroundTint="?android:attr/colorBackground"
+        app:srcCompat="@drawable/ic_vector_compose_dm" />
+
+    <ImageButton
+        android:id="@+id/ibRetweet"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/ivProfilePic"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="?android:attr/colorBackground"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke" />
+
+    <ImageButton
+        android:id="@+id/ibFavorite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ivProfilePic"
+        android:backgroundTint="?android:attr/colorBackground"
+        app:srcCompat="@drawable/ic_vector_heart_stroke" />
+
+</RelativeLayout>
